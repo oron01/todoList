@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "update": "git subtree push --prefix dist origin gh-pages"
+    "update": "git subtree push --prefix dist origin gh-pages",
+    "start": "webpack serve --open"
   },
   "keywords": [],
   "author": "",
