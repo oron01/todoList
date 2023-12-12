@@ -1,3 +1,4 @@
+import css from "./style.css"
 
 let createTodoFunctionality = () => {
     let projects = []
