@@ -1,13 +1,14 @@
 
 let createTodoFunctionality = () => {
     let projects = []
-    let createProject = (projectName,projectDescription,taskList=[]) => {
+    let createProject = (projectName,projectDescription,taskList=[],projectOrder) => {
         let name = projectName
         let description = projectDescription
         let projectTasks = [...taskList]
+        let order = projectOrder
         // projectTasks.push(...taskList)
         projects.push({name,description,projectTasks})
-        return {name,description,projectTasks}
+        return {name,description,projectTasks,order}
     }
 
     let createTask = (taskName,taskDescription,taskDueDate,taskPriority,taskNotes) => {
@@ -24,6 +25,7 @@ let createTodoFunctionality = () => {
         console.log(project)
         if (priority !== "null" && Number.isInteger(priority)) {
             project.projectTasks.splice(priority,0,taskToAssign)
+            alert("a")
         }
         else if (priority == "last") {
         project.projectTasks.push(taskToAssign)}
@@ -99,10 +101,11 @@ let a = todoApp.createTask("firstTask",)
 let b = todoApp.createTask("secondTask",)
 todoApp.assignTask(a,"project1",1)
 todoApp.assignTask(b,"project3",1)
-todoApp.moveTask.call(todoApp,"project1",a,"project3")
+// todoApp.moveTask.call(todoApp,"project1",a,"project3")
 todoApp.alertProjects()
 console.log(Array.isArray(todoApp.projects[0].projectTasks))
 
+let createTodoDisplay = () => {}
 /* 
 Code
 Functionality:
