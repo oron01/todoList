@@ -1,100 +1,54 @@
 import css from "./style.css"
+import { createSidebarDisplay } from "./createSidebarDisplay"
+import { createTodoFunctionality } from "./createTodoListFunctionality"
+import { createContainer } from "./createContainer"
+import { createMainDisplay } from "./createMainDisplay"
 
-let createTodoFunctionality = () => {
-    let projects = []
-    let createProject = (projectName,projectDescription,taskList=[],projectOrder) => {
-        let name = projectName
-        let description = projectDescription
-        let projectTasks = [...taskList]
-        let order = projectOrder
-        // projectTasks.push(...taskList)
-        projects.push({name,description,projectTasks})
-        return {name,description,projectTasks,order}
+let createControllerObject = () => {
+    let generalTasks = {
+        projectName: "General Tasks",
+        projectDescription: "A to do list for your tasks",
+        isSelectedProject: true,
+        sidebarReference: null,
+        tasks: [
+            {
+                taskName : "Figure out how to use this app",
+                dueDate: "17/12/2023",
+                CheckStatus: false,
+                priorty: "low",
+            }]
     }
-
-    let createTask = (taskName,taskDescription,taskDueDate,taskPriority,taskNotes) => {
-        let name = taskName
-        let description = taskDescription
-        let dueDate = taskDueDate
-        let priority = taskPriority
-        let notes = taskNotes
-        return {name,description,dueDate,priority,notes}
-    }
-
-    let assignTask = (taskToAssign, toProjectNamed,priority="last") => {
-        let project = findProjectByName(toProjectNamed)
-        console.log(project)
-        if (priority !== "null" && Number.isInteger(priority)) {
-            project.projectTasks.splice(priority,0,taskToAssign)
-            alert("a")
-        }
-        else if (priority == "last") {
-        project.projectTasks.push(taskToAssign)}
-        else {
-            project.projectTasks.push(taskToAssign)}
-        setTaskList(project)
-    }
-
-    let moveTask = (prevProjectName,taskName,toProjectNamed,count) => {
-        let prevProject = findProjectByName(prevProjectName)
-        let prevLocation = prevProject.projectTasks
-        let prevTaskInstance = prevLocation[findTaskByName(prevProject,taskName)]
-        prevLocation.splice(findTaskByName(prevProject,taskName),1)
-        let project = findProjectByName(toProjectNamed)
-        project.projectTasks.splice(taskName.priority,0,taskName)
-        setTaskList(prevProject)
-        setTaskList(project)
-        // count yet to be implemented
-    }
-
-    let setTaskList = (project) => {
-        for (let i = 0 ; i < project.projectTasks.length; i++) {
-            project.projectTasks[i].priority = i
-        }
-    }
-
-    let findProjectByName = (projectName) => {
-        for (let i = 0; i < projects.length; i++) {
-            if (projects[i].name == projectName) {
-                // console.log(projects[i])
-                return projects[i]
-            }
-        }
-    }
-
-    let findTaskByName = (project,taskName) => {
-        let projectTasks = project.projectTasks
-        for (let i = 0; i < projectTasks.length;i++) {
-            if (projectTasks[i] == taskName) {
-                return i
-            }
-        }
-    } 
-
-    let alertProjects = () => {
-        console.log(projects)
-        console.log(JSON.stringify(projects))
-    }
-    let changeProperty = (instanceType,instanceName,propertyName,newValue) => {
-        let changeTask = () => {   
-        }
-        let changeProject = () => {
-            let project = findProjectByName(instanceName)
-            project[propertyName] = newValue
-        }
-        switch (instanceType) {
-            case "project":
-                changeProject()
-                break;
-            case "task":
-                changeTask()
-            break;
-        }
-        console.log(projects)
-
-    }
-    return {projects,createProject,createTask,assignTask,alertProjects,findProjectByName, changeProperty, moveTask,findTaskByName}
+    let projects = [generalTasks]
+    let selectedProject = generalTasks
+    let updateMain = () => {mainDisplay.updateMain()}
+    let updateSecondary = () => {secondaryDisplay.refreshTestPanel()}
+    return {projects,selectedProject,updateMain,updateSecondary}
 }
+
+let controllerObject = createControllerObject()
+
+let createSecondaryDisplay = () => {
+    let container = document.querySelector(".container")
+    let secondaryContainer = document.createElement("div")
+    secondaryContainer.classList = "secondaryContainer"
+    container.appendChild(secondaryContainer)
+
+    let refreshTestPanel = () => {
+        if (controllerObject.selectedProject !== null) {
+        let selectedProject = document.querySelector(".testSelectedProject")
+        secondaryContainer.removeChild(selectedProject)}
+        renderTestPanel()
+    }
+    let renderTestPanel = () => {
+        let selectedProject = document.createElement("div")
+        if (controllerObject.selectedProject !== null) {selectedProject.textContent = controllerObject.selectedProject.projectName}
+        secondaryContainer.appendChild(selectedProject)
+        selectedProject.classList = "testSelectedProject"
+    }
+    renderTestPanel()
+    return {refreshTestPanel,renderTestPanel}
+}
+
 let todoApp =  createTodoFunctionality()
 todoApp.createProject("project1","First-Project")
 todoApp.createProject("project3","Second-Project")
@@ -106,7 +60,10 @@ todoApp.assignTask(b,"project3",1)
 todoApp.alertProjects()
 console.log(Array.isArray(todoApp.projects[0].projectTasks))
 
-let createTodoDisplay = () => {}
+let container = createContainer.call(this,controllerObject)
+let sidebar = createSidebarDisplay.call(this,controllerObject)
+let mainDisplay = createMainDisplay.call(this,controllerObject)
+let secondaryDisplay = createSecondaryDisplay.call(this,controllerObject)
 /* 
 Code
 Functionality:
