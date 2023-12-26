@@ -13,9 +13,10 @@ let createControllerObject = () => {
         tasks: [
             {
                 taskName : "Figure out how to use this app",
-                dueDate: "17/12/2023",
+                dueDate: "11/11/2022",
                 CheckStatus: false,
-                priorty: "low",
+                priority: "low",
+                taskDescription:"You know nall that"
             }]
     }
     let projects = [generalTasks]
@@ -34,18 +35,70 @@ let createSecondaryDisplay = () => {
     container.appendChild(secondaryContainer)
 
     let refreshTestPanel = () => {
-        if (controllerObject.selectedProject !== null) {
-        let selectedProject = document.querySelector(".testSelectedProject")
-        secondaryContainer.removeChild(selectedProject)}
-        renderTestPanel()
+        // let selectedProject = document.querySelector(".testSelectedProject")
+        // secondaryContainer.removeChild(selectedProject)
+        // communicateTestPanel()
+        let statsThing = document.querySelector(".sSidebarDiv")
+        secondaryContainer.removeChild(statsThing)
+        renderSidebar()
     }
     let renderTestPanel = () => {
         let selectedProject = document.createElement("div")
-        if (controllerObject.selectedProject !== null) {selectedProject.textContent = controllerObject.selectedProject.projectName}
         secondaryContainer.appendChild(selectedProject)
+        if (controllerObject.selectedProject !== null) {selectedProject.textContent = controllerObject.selectedProject.projectName}
+        else {selectedProject.textContent = "empty"}
         selectedProject.classList = "testSelectedProject"
     }
-    renderTestPanel()
+    // renderTestPanel()
+
+    let renderSidebar = () => {
+        let sidebarDiv = document.createElement("div")
+        sidebarDiv.classList = "sSidebarDiv"
+        let sidebarHeader = document.createElement("h1")
+        sidebarHeader.textContent = "Stats"
+        sidebarHeader.classList = "sSidebarHeader"
+        secondaryContainer.appendChild(sidebarDiv)
+        sidebarDiv.appendChild(sidebarHeader)
+
+        let projectsCounterDiv = document.createElement("div")
+        projectsCounterDiv.classList = "projectsCounterDiv"
+        sidebarDiv.appendChild(projectsCounterDiv)
+        let projectCounterLabel = document.createElement("p")
+        projectCounterLabel.textContent = `Total Projects: ${controllerObject.projects.length}`
+        projectCounterLabel.classList = "projectCounterLabel"
+        projectsCounterDiv.appendChild(projectCounterLabel)
+        let taskCounterLabel = document.createElement("p")
+
+        let getTasksCount = () => {
+            let taskCount = 0
+            for (let i = 0; i < controllerObject.projects.length ; i++) {
+                taskCount = i + controllerObject.projects[i].tasks.length
+                console.log(controllerObject.projects[i].tasks.length)
+            }
+            return taskCount
+        }
+        taskCounterLabel.textContent = `Total Tasks: ${getTasksCount()}`
+        projectsCounterDiv.appendChild(taskCounterLabel)
+
+        let taskDueToday = document.createElement("p")
+        
+        let getTasksDueToday = () => {
+            let tasksDue = 0
+            let tasksCompleted = 0
+            for (let i = 0; i < controllerObject.projects.length ; i++) {
+                for (let i2 = 0 ; i2 < controllerObject.projects[i].tasks.length; i2++) {
+                    if (controllerObject.projects[i].tasks[i2].CheckStatus == true) {tasksCompleted = tasksCompleted + 1
+                    tasksDue = tasksDue + 1}
+                    else if (controllerObject.projects[i].tasks[i2].CheckStatus == false) {tasksDue = tasksDue + 1}
+                }
+            }
+            return {tasksDue,tasksCompleted}
+        }
+        taskDueToday.textContent = `Tasks assigned to today (Completion status): ${getTasksDueToday().tasksCompleted}/${getTasksDueToday().tasksDue}`
+        projectsCounterDiv.appendChild(taskDueToday)
+    }
+    renderSidebar()
+
     return {refreshTestPanel,renderTestPanel}
 }
 
