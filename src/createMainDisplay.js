@@ -100,7 +100,7 @@ export let createMainDisplay = (controllerObject) => {
                     promptDialog.close()
                     body.removeChild(promptDialog)
                     controllerObject.selectedProject.tasks.push(newTask)
-                    updateMain()
+                    controllerObject.updateMain()
                 }
                 saveButton.addEventListener("click",savePrompt)
 
@@ -418,7 +418,7 @@ export let createMainDisplay = (controllerObject) => {
                         {controllerObject.selectedProject.tasks.push(newTask)}
                     else if (isNameDuped() == true) {alert("Tasks can't have the same name")}
                     else {alert("Task names can't be blank.")}
-                    updateMain()
+                    controllerObject.updateMain()
                     controllerObject.updateSecondary()
                 }
                 saveButton.addEventListener("click",savePrompt)

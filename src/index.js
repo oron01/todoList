@@ -4,6 +4,7 @@ import { createTodoFunctionality } from "./createTodoListFunctionality"
 import { createContainer } from "./createContainer"
 import { createMainDisplay } from "./createMainDisplay"
 
+
 let createControllerObject = () => {
     let generalTasks = {
         projectName: "General Tasks",
@@ -21,12 +22,26 @@ let createControllerObject = () => {
     }
     let projects = [generalTasks]
     let selectedProject = generalTasks
-    let updateMain = () => {mainDisplay.updateMain()}
-    let updateSecondary = () => {secondaryDisplay.refreshTestPanel()}
+    let updateMain = () => {mainDisplay.updateMain()
+        localStorage["controllerObjectProjects"] = JSON.stringify(controllerObject.projects)
+        alert("updarted")  
+        console.log(localStorage["controllerObjectProjects"])  
+    }
+    let updateSecondary = () => {secondaryDisplay.refreshTestPanel()
+        localStorage["controllerObjectProjects"] = JSON.stringify(controllerObject.projects)}
     return {projects,selectedProject,updateMain,updateSecondary}
 }
 
+const handleLocalStorageUpdate = () => {
+    console.log("Data retrieved from localStorage:", controllerObject.projects);
+}
+
 let controllerObject = createControllerObject()
+if (localStorage.controllerObjectProjects !== undefined && localStorage.controllerObjectProjects !== null) {alert("asd")
+    controllerObject.projects = JSON.parse(localStorage.getItem("controllerObjectProjects"))
+handleLocalStorageUpdate()
+}
+
 
 let createSecondaryDisplay = () => {
     let container = document.querySelector(".container")
@@ -117,6 +132,9 @@ let container = createContainer.call(this,controllerObject)
 let sidebar = createSidebarDisplay.call(this,controllerObject)
 let mainDisplay = createMainDisplay.call(this,controllerObject)
 let secondaryDisplay = createSecondaryDisplay.call(this,controllerObject)
+
+controllerObject.updateMain()
+
 /* 
 Code
 Functionality:
